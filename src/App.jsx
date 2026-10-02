@@ -1,121 +1,180 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([])
+  const [title, setTitle] = useState('')
+  const [project, setProject] = useState('')
+  const [estimate, setEstimate] = useState('')
+  const [editingId, setEditingId] = useState(null)
+
+  function resetForm() {
+    setTitle('')
+    setProject('')
+    setEstimate('')
+    setEditingId(null)
+  }
+
+  function saveTask(event) {
+    event.preventDefault()
+
+    if (!title.trim()) return
+
+    const taskData = {
+      title: title.trim(),
+      project: project.trim(),
+      estimate: estimate === '' ? null : Number(estimate),
+    }
+
+    if (editingId !== null) {
+      setTasks((current) =>
+        current.map((task) =>
+          task.id === editingId ? { ...task, ...taskData } : task,
+        ),
+      )
+    } else {
+      setTasks((current) => [
+        ...current,
+        {
+          id: crypto.randomUUID(),
+          ...taskData,
+          completed: false,
+        },
+      ])
+    }
+
+    resetForm()
+  }
+
+  function editTask(task) {
+    setEditingId(task.id)
+    setTitle(task.title)
+    setProject(task.project)
+    setEstimate(task.estimate ?? '')
+  }
+
+  function toggleTask(id) {
+    setTasks((current) =>
+      current.map((task) =>
+        task.id === id
+          ? { ...task, completed: !task.completed }
+          : task,
+      ),
+    )
+  }
+
+  function deleteTask(id) {
+    setTasks((current) => current.filter((task) => task.id !== id))
+
+    if (editingId === id) resetForm()
+  }
+
+  const completedCount = tasks.filter((task) => task.completed).length
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+    <main>
+      <header>
+        <p>GÜNÜNÜ PLANLA · ODAĞINI KORU</p>
+        <h1>FocusBoard</h1>
+        <p>Bir görev seç. Küçük bir adımla başla.</p>
+      </header>
+
+      <section aria-labelledby="form-heading">
+        <h2 id="form-heading">
+          {editingId !== null ? 'Görevi düzenle' : 'Yeni görev'}
+        </h2>
+
+        <form onSubmit={saveTask}>
+          <label htmlFor="task-title">Görev başlığı</label>
+          <input
+            id="task-title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder="Örneğin: Ana sayfa tasarımını bitir"
+            required
+            maxLength={120}
+          />
+
+          <label htmlFor="task-project">Proje etiketi — isteğe bağlı</label>
+          <input
+            id="task-project"
+            value={project}
+            onChange={(event) => setProject(event.target.value)}
+            placeholder="Örneğin: Müşteri sitesi"
+            maxLength={50}
+          />
+
+          <label htmlFor="task-estimate">
+            Tahmini dakika — isteğe bağlı
+          </label>
+          <input
+            id="task-estimate"
+            type="number"
+            min="1"
+            max="1440"
+            step="1"
+            value={estimate}
+            onChange={(event) => setEstimate(event.target.value)}
+            placeholder="25"
+          />
+
+          <button type="submit" disabled={!title.trim()}>
+            {editingId !== null ? 'Değişiklikleri kaydet' : 'Görev ekle'}
+          </button>
+
+          {editingId !== null && (
+            <button type="button" onClick={resetForm}>
+              Düzenlemekten vazgeç
+            </button>
+          )}
+        </form>
       </section>
 
-      <div className="ticks"></div>
+      <section aria-labelledby="tasks-heading">
+        <h2 id="tasks-heading">Görevlerin</h2>
+        <p>
+          {tasks.length} görev · {completedCount} tamamlandı
+        </p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
+        {tasks.length === 0 ? (
+          <p>Henüz görev yok. Yukarıdan ilk görevini ekle.</p>
+        ) : (
           <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
+            {tasks.map((task) => (
+              <li key={task.id}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => toggleTask(task.id)}
+                  />
+                  <span
+                    style={{
+                      textDecoration: task.completed
+                        ? 'line-through'
+                        : 'none',
+                    }}
+                  >
+                    {task.title}
+                  </span>
+                </label>
+
+                {task.project && <p>Proje: {task.project}</p>}
+                {task.estimate !== null && (
+                  <p>Tahmin: {task.estimate} dakika</p>
+                )}
+
+                <button type="button" onClick={() => editTask(task)}>
+                  Düzenle
+                </button>
+                <button type="button" onClick={() => deleteTask(task.id)}>
+                  Sil
+                </button>
+              </li>
+            ))}
           </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
+        )}
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </main>
   )
 }
 
