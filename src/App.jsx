@@ -37,9 +37,13 @@ const timerText = `${Math.floor(remainingSeconds / 60)
 useEffect(() => {
   try {
     localStorage.setItem('focusboard.tasks', JSON.stringify(tasks))
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Report the result of writing to external storage.
     setStorageError('')
   } catch (error) {
     console.error('Görevler kaydedilemedi:', error)
+
+    
     setStorageError(
       'Görevler kaydedilemiyor. Sayfayı kapatırsan son değişiklikler kaybolabilir.',
     )

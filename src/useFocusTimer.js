@@ -57,14 +57,18 @@ export default function useFocusTimer() {
   }, [])
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(focus))
-      setSaveError('')
-    } catch (error) {
-      console.error('Odak kayıtları kaydedilemedi:', error)
-      setSaveError('Odak kayıtları kaydedilemiyor.')
-    }
-  }, [focus])
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(focus))
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Report the result of writing to external storage.
+    setSaveError('')
+  } catch (error) {
+    console.error('Odak kayıtları kaydedilemedi:', error)
+
+    
+    setSaveError('Odak kayıtları kaydedilemiyor.')
+  }
+}, [focus])
 
   function start(task, minutes) {
     const durationMs = Number(minutes) * 60 * 1000
