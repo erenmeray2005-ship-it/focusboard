@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import useFocusTimer from './useFocusTimer'
 import TodaySummary from './TodaySummary'
 import FocusNotifications from './FocusNotifications'
+import ThemeToggle from './ThemeToggle'
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -115,6 +116,7 @@ useEffect(() => {
       <header>
         <p>GÜNÜNÜ PLANLA · ODAĞINI KORU</p>
         <h1>FocusBoard</h1>
+        <ThemeToggle />
         <p>Bir görev seç. Küçük bir adımla başla.</p>
       </header>
 
