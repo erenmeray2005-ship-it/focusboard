@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 export default function FocusNotifications({ sessions }) {
+  const desktop = Boolean(window.focusboardDesktop)
   const supported = 'Notification' in window
 
   const [permission, setPermission] = useState(() =>
@@ -13,28 +14,39 @@ export default function FocusNotifications({ sessions }) {
   )
 
   useEffect(() => {
-    for (const session of sessions) {
-      if (seenIds.current.has(session.id)) continue
-
-      seenIds.current.add(session.id)
-
+    async function notify(session) {
       const body = `${session.taskTitle} için odak oturumun tamamlandı.`
       setMessage(body)
 
-      if (
-        'Notification' in window &&
-        Notification.permission === 'granted'
-      ) {
-        try {
+      try {
+        if (window.focusboardDesktop) {
+          const result = await window.focusboardDesktop.notify(
+            session.taskTitle,
+          )
+
+          if (!result.ok) {
+            setMessage(`${body} ${result.reason}`)
+          }
+        } else if (
+          'Notification' in window &&
+          Notification.permission === 'granted'
+        ) {
           new Notification('FocusBoard — Süre doldu!', {
             body,
             tag: session.id,
           })
-        } catch (error) {
-          console.error('Bildirim gösterilemedi:', error)
-          setMessage(`${body} Sistem bildirimi gösterilemedi.`)
         }
+      } catch (error) {
+        console.error('Bildirim gösterilemedi:', error)
+        setMessage(`${body} Sistem bildirimi gösterilemedi.`)
       }
+    }
+
+    for (const session of sessions) {
+      if (seenIds.current.has(session.id)) continue
+
+      seenIds.current.add(session.id)
+      void notify(session)
     }
   }, [sessions])
 
@@ -43,11 +55,11 @@ export default function FocusNotifications({ sessions }) {
       const result = await Notification.requestPermission()
       setPermission(result)
 
-      if (result === 'granted') {
-        setMessage('Bildirimler açık. Bir odak oturumu bitirerek dene.')
-      } else {
-        setMessage('Bildirim izni verilmedi. Zamanlayıcı çalışmaya devam eder.')
-      }
+      setMessage(
+        result === 'granted'
+          ? 'Bildirimler açık. Bir odak oturumu bitirerek dene.'
+          : 'Bildirim izni verilmedi. Zamanlayıcı çalışmaya devam eder.',
+      )
     } catch (error) {
       console.error('Bildirim izni alınamadı:', error)
       setMessage('Bildirim izni alınamadı.')
@@ -58,7 +70,12 @@ export default function FocusNotifications({ sessions }) {
     <section aria-labelledby="notifications-heading">
       <h2 id="notifications-heading">Bildirimler</h2>
 
-      {permission === 'unsupported' ? (
+      {desktop ? (
+        <p>
+          Windows sistem bildirimleri kullanılıyor.
+          Bildirim görünürlüğü Windows ayarlarına bağlıdır.
+        </p>
+      ) : permission === 'unsupported' ? (
         <p>Bu tarayıcı sistem bildirimlerini desteklemiyor.</p>
       ) : permission === 'granted' ? (
         <p>Bildirimler açık.</p>
