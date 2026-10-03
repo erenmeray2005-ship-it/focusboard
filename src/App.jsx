@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import useFocusTimer from './useFocusTimer'
+import TodaySummary from './TodaySummary'
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -108,6 +109,7 @@ useEffect(() => {
 
   return (
     <main>
+      
       {storageError && <p role="alert">{storageError}</p>}
       <header>
         <p>GÜNÜNÜ PLANLA · ODAĞINI KORU</p>
@@ -273,7 +275,8 @@ useEffect(() => {
             ))}
           </ul>
         )}
-      </section>
+            </section>
+      <TodaySummary sessions={focus.sessions} />
     </main>
   )
 }
