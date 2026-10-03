@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import useFocusTimer from './useFocusTimer'
 import TodaySummary from './TodaySummary'
+import FocusNotifications from './FocusNotifications'
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -276,6 +277,7 @@ useEffect(() => {
           </ul>
         )}
             </section>
+      <FocusNotifications sessions={focus.sessions} />
       <TodaySummary sessions={focus.sessions} />
     </main>
   )
