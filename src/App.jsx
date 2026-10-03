@@ -1,11 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState(() => {
+  try {
+    const saved = localStorage.getItem('focusboard.tasks')
+    if (!saved) return []
+
+    const parsed = JSON.parse(saved)
+    if (!Array.isArray(parsed)) return []
+
+    return parsed
+  } catch (error) {
+    console.error('Görevler okunamadı:', error)
+    return []
+  }
+})
   const [title, setTitle] = useState('')
   const [project, setProject] = useState('')
   const [estimate, setEstimate] = useState('')
   const [editingId, setEditingId] = useState(null)
+  const [storageError, setStorageError] = useState('')
+
+useEffect(() => {
+  try {
+    localStorage.setItem('focusboard.tasks', JSON.stringify(tasks))
+    setStorageError('')
+  } catch (error) {
+    console.error('Görevler kaydedilemedi:', error)
+    setStorageError(
+      'Görevler kaydedilemiyor. Sayfayı kapatırsan son değişiklikler kaybolabilir.',
+    )
+  }
+}, [tasks])
 
   function resetForm() {
     setTitle('')
@@ -72,6 +98,7 @@ function App() {
 
   return (
     <main>
+      {storageError && <p role="alert">{storageError}</p>}
       <header>
         <p>GÜNÜNÜ PLANLA · ODAĞINI KORU</p>
         <h1>FocusBoard</h1>
