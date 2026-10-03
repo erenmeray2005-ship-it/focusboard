@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import useFocusTimer from './useFocusTimer'
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -19,6 +20,15 @@ function App() {
   const [project, setProject] = useState('')
   const [estimate, setEstimate] = useState('')
   const [editingId, setEditingId] = useState(null)
+  const [focusMinutes, setFocusMinutes] = useState(25)
+const focus = useFocusTimer()
+
+const remainingSeconds = Math.ceil(focus.remainingMs / 1000)
+const timerText = `${Math.floor(remainingSeconds / 60)
+  .toString()
+  .padStart(2, '0')}:${(remainingSeconds % 60)
+  .toString()
+  .padStart(2, '0')}`
   const [storageError, setStorageError] = useState('')
 
 useEffect(() => {
@@ -156,6 +166,55 @@ useEffect(() => {
         </form>
       </section>
 
+      <section aria-labelledby="focus-heading">
+  <h2 id="focus-heading">Odak zamanlayıcısı</h2>
+
+  {focus.saveError && <p role="alert">{focus.saveError}</p>}
+
+  <label htmlFor="focus-minutes">Odak süresi — dakika</label>
+  <input
+    id="focus-minutes"
+    type="number"
+    min="1"
+    max="1440"
+    step="1"
+    value={focusMinutes}
+    disabled={Boolean(focus.timer)}
+    onChange={(event) => setFocusMinutes(event.target.value)}
+  />
+
+  {focus.timer ? (
+    <div>
+      <h3>{focus.timer.taskTitle}</h3>
+      <p style={{ fontSize: '3rem', fontWeight: 700 }}>
+        {timerText}
+      </p>
+      <p>
+        {focus.timer.status === 'paused'
+          ? 'Duraklatıldı'
+          : 'Odak oturumu devam ediyor'}
+      </p>
+
+      {focus.timer.status === 'running' ? (
+        <button type="button" onClick={focus.pause}>
+          Duraklat
+        </button>
+      ) : (
+        <button type="button" onClick={focus.resume}>
+          Devam et
+        </button>
+      )}
+
+      <button type="button" onClick={focus.cancel}>
+        Oturumu iptal et
+      </button>
+    </div>
+  ) : (
+    <p>Başlamak için bir görevin “Odaklan” düğmesine bas.</p>
+  )}
+
+  <p>Tamamlanan odak oturumu: {focus.sessions.length}</p>
+</section>
       <section aria-labelledby="tasks-heading">
         <h2 id="tasks-heading">Görevlerin</h2>
         <p>
@@ -190,9 +249,23 @@ useEffect(() => {
                   <p>Tahmin: {task.estimate} dakika</p>
                 )}
 
-                <button type="button" onClick={() => editTask(task)}>
-                  Düzenle
-                </button>
+                <button
+  type="button"
+  disabled={
+    task.completed ||
+    Boolean(focus.timer) ||
+    !Number.isInteger(Number(focusMinutes)) ||
+    Number(focusMinutes) < 1 ||
+    Number(focusMinutes) > 1440
+  }
+  onClick={() => focus.start(task, focusMinutes)}
+>
+  Odaklan
+</button>
+
+<button type="button" onClick={() => editTask(task)}>
+  Düzenle
+</button>
                 <button type="button" onClick={() => deleteTask(task.id)}>
                   Sil
                 </button>
