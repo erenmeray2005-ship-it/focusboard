@@ -164,3 +164,7 @@ Cihazlar arası senkronizasyon için kullanıcı hesabı, sunucu tarafında veri
 ![Windows uygulaması](docs/screenshots/desktop.png)
 
 ![Windows uygulaması görevler ve bildirimler](docs/screenshots/desktop-summary.png)
+
+### Mobil görünüm — 375 piksel
+
+![375 piksel genişlikte mobil görünüm](docs/screenshots/mobile.png)
