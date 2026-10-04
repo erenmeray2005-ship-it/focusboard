@@ -144,3 +144,23 @@ Detaylı kayıtlar `AI_LOG.md` dosyasındadır.
 Zamanlayıcının önemli durumları için otomatik testler, kayıt verilerinin daha ayrıntılı doğrulanması, CSV dışa aktarma ve klavye kısayolları eklerdim. Windows kurulumunu temiz bir bilgisayarda dener, erişilebilirlik kontrollerini genişletirdim.
 
 Cihazlar arası senkronizasyon için kullanıcı hesabı, sunucu tarafında veri saklama ve çakışan değişiklikleri yöneten bir yapı tasarlardım.
+
+## Ekran görüntüleri
+
+### Web — koyu tema
+
+![Web koyu tema](docs/screenshots/web-dark.png)
+
+![Web koyu tema görevler ve özet](docs/screenshots/web-dark-summary.png)
+
+### Web — açık tema
+
+![Web açık tema](docs/screenshots/web-light.png)
+
+![Web açık tema görevler ve özet](docs/screenshots/web-light-summary.png)
+
+### Windows uygulaması
+
+![Windows uygulaması](docs/screenshots/desktop.png)
+
+![Windows uygulaması görevler ve bildirimler](docs/screenshots/desktop-summary.png)
