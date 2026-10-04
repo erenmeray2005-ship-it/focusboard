@@ -191,3 +191,33 @@ npm run lint: hata ve uyarı yok.
 npm run build: başarılı.
 
 Bu sonuç, 6. bölümde kaydedilen açık konunun güncel durumudur.
+## 10. Yayın, teslim belgeleri ve son kontroller
+
+Araç: ChatGPT
+
+İstek/bağlam özeti:
+Web uygulamasını yayımlamak, Windows sürümünü paylaşmak,
+README ve ekran görüntülerini hazırlamak, mobil görünümü
+ve zamanlayıcının uyku sonrası davranışını kontrol etmek.
+
+Üretilen:
+GitHub Actions ile web derleme ve GitHub Pages yayını.
+README için kurulum, kullanım, teknik kararlar ve değerlendirme metni.
+Ekran görüntülerini hazırlama ve manuel kontrol adımları.
+
+Kontrol:
+Canlı web uygulaması açıldı.
+Windows kurulum dosyası v1.0.0 GitHub Release'e yüklendi.
+Web, masaüstü ve 375 piksel mobil görünüm görüntüleri depoya eklendi.
+375 piksel görünümde incelenen bölümlerde yatay taşma görülmedi.
+Windows uygulamasında bir dakikalık oturum sırasında bilgisayar
+uyutuldu. 90 saniyeden uzun süre sonra uyandırıldığında sayaç
+bitmişti ve sistem bildirimi geldi.
+
+Düzeltme:
+Ekran görüntülerinde eski test adları ve kesilmiş bölümler fark edildi.
+Görüntü alanları düzenlenerek ilgili görüntüler yeniden alındı.
+
+Kalan:
+Demo videosunun hazırlanması, bağlantısının README'ye eklenmesi
+ve teslim bağlantılarının son kontrolü.

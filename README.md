@@ -104,7 +104,8 @@ Duraklatma kalan süreyi korur. İptal edilen, henüz tamamlanmamış oturumlar 
 
 ## Doğrulama
 
-Gerçekleştirilen kontroller:
+Gerçekleştirilen kontroller:- Tarayıcının 375 piksel görünümünde form, görev kartları ve alt bölümler görsel olarak kontrol edildi.
+- Windows uygulamasında bir dakikalık oturum sırasında bilgisayar uyutuldu; 90 saniyeden uzun süre sonra uyandırıldığında oturum tamamlanmıştı ve bildirim geldi.
 
 - Görev ekleme, düzenleme, tamamlama ve silme.
 - Sayfa yenilendikten sonra görevlerin korunması.
