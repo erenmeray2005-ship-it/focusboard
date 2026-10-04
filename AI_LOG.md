@@ -218,6 +218,10 @@ Düzeltme:
 Ekran görüntülerinde eski test adları ve kesilmiş bölümler fark edildi.
 Görüntü alanları düzenlenerek ilgili görüntüler yeniden alındı.
 
+Demo:
+3 dakika 56 saniyelik ekran ve ses kaydı hazırlandı.
+Video v1.0.0 GitHub Release'e yüklendi.
+Video bağlantısı README'ye eklendi.
+
 Kalan:
-Demo videosunun hazırlanması, bağlantısının README'ye eklenmesi
-ve teslim bağlantılarının son kontrolü.
+Teslim bağlantılarının son kontrolü.

@@ -1,4 +1,5 @@
 # FocusBoard
+**Demo videosu (3 dakika 56 saniye):** [Videoyu aç / indir](https://github.com/erenmeray2005-ship-it/focusboard/releases/download/v1.0.0/FocusBoard-Demo.mp4)
 
 **Canlı web uygulaması:** https://erenmeray2005-ship-it.github.io/focusboard/
 
