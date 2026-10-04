@@ -172,3 +172,22 @@ Mevcut teslim durumu:
 Güncel tasarımla son Windows paketi, canlı web yayını, GitHub Release,
 README, ekran görüntüleri ve demo videosu henüz hazırlanmadı.
 Uyku sonrası zamanlayıcı davranışı henüz denenmedi.
+## 9. Bağımlılık uyarısının giderilmesi
+
+Araç: ChatGPT
+
+İstek ve bağlam özeti:
+Teslim öncesinde kalan bağımlılık uyarılarını yeniden kontrol etmek.
+
+Kontrol ve düzeltme:
+4 Ekim'deki npm audit çıktısında http-cache-semantics için tek
+yüksek önem dereceli uyarı kaldığı görüldü.
+Rapor normal npm audit fix komutuyla düzeltme önerdi.
+Komut çalıştırıldı ve bir paket güncellendi.
+
+Sonuç:
+npm audit: 0 bilinen güvenlik açığı.
+npm run lint: hata ve uyarı yok.
+npm run build: başarılı.
+
+Bu sonuç, 6. bölümde kaydedilen açık konunun güncel durumudur.
